@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Itinerary Planner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+    <div class="background-decorations">
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="plane"></div>
+    </div>
+    <div class="container">
+        <header class="hero">
+            <div class="hero-content">
+                <h1>Discover Your Perfect Day Trip</h1>
+                <p>Plan your adventure with our AI-powered itinerary generator</p>
+            </div>
+            <div class="hero-illustration">
+                <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="100" r="90" fill="#FFD700" />
+                    <path d="M100 20C55.8172 20 20 55.8172 20 100C20 144.183 55.8172 180 100 180C144.183 180 180 144.183 180 100C180 55.8172 144.183 20 100 20ZM100 170C61.3401 170 30 138.66 30 100C30 61.3401 61.3401 30 100 30C138.66 30 170 61.3401 170 100C170 138.66 138.66 170 100 170Z" fill="#FFA500"/>
+                    <path d="M100 40C66.8629 40 40 66.8629 40 100C40 133.137 66.8629 160 100 160C133.137 160 160 133.137 160 100C160 66.8629 133.137 40 100 40ZM100 150C72.3858 150 50 127.614 50 100C50 72.3858 72.3858 50 100 50C127.614 50 150 72.3858 150 100C150 127.614 127.614 150 100 150Z" fill="#FF6347"/>
+                    <path d="M100 60C77.9086 60 60 77.9086 60 100C60 122.091 77.9086 140 100 140C122.091 140 140 122.091 140 100C140 77.9086 122.091 60 100 60ZM100 130C83.4315 130 70 116.569 70 100C70 83.4315 83.4315 70 100 70C116.569 70 130 83.4315 130 100C130 116.569 116.569 130 100 130Z" fill="#4169E1"/>
+                    <circle cx="100" cy="100" r="20" fill="#ffffff" />
+                </svg>
+            </div>
+        </header>
+
+        <div class="card">
+            <form method="POST" class="planner-form">
+                <div class="form-group">
+                    <label for="city">
+                        <i data-feather="map-pin"></i>
+                        Destination City
+                    </label>
+                    <input type="text" id="city" name="city" required placeholder="Where are you heading?">
+                </div>
+
+                <div class="form-group">
+                    <label for="interests">
+                        <i data-feather="heart"></i>
+                        Your Interests
+                    </label>
+                    <input type="text" id="interests" name="interests" required 
+                           placeholder="e.g., museums, hiking, food">
+                    <small>Separate interests with commas</small>
+                </div>
+
+                <button type="submit" class="cta-button">
+                    <i data-feather="calendar"></i>
+                    Generate Itinerary
+                    <span class="loading-animation"></span>
+                </button>
+            </form>
+        </div>
+
+        {% if show_results %}
+        <div class="results fade-in">
+            <div class="card itinerary-box">
+                <h2>
+                    <i data-feather="clipboard"></i>
+                    Your Day Trip Plan
+                </h2>
+                <div id="itinerary-text" class="itinerary-content">
+                    {{ itinerary|safe }}
+                </div>
+                <div class="button-group">
+                    <button onclick="copyItinerary()" class="action-button copy-button">
+                        <i data-feather="copy"></i>
+                        Copy Itinerary
+                    </button>
+                    <a href="/download?pdf_path={{ pdf_path }}" class="action-button download-button">
+                        <i data-feather="download"></i>
+                        Download PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        feather.replace();
+
+        function copyItinerary() {
+            let itineraryText = document.getElementById("itinerary-text").innerText;
+            navigator.clipboard.writeText(itineraryText).then(() => {
+                alert("✅ Itinerary copied to clipboard!");
+            }).catch(err => {
+                console.error("Failed to copy itinerary:", err);
+            });
+        }
+
+        document.querySelector('.planner-form').addEventListener('submit', function(e) {
+            this.classList.add('submitting');
+        });
+    </script>
+</body>
+</html>
+
