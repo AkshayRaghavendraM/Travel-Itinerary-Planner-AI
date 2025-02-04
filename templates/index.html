@@ -13,15 +13,17 @@
         <div class="cloud cloud1"></div>
         <div class="cloud cloud2"></div>
         <div class="plane"></div>
+        <div class="sun"></div>
+        <div class="mountain"></div>
     </div>
     <div class="container">
         <header class="hero">
             <div class="hero-content">
-                <h1>Discover Your Perfect Day Trip</h1>
-                <p>Plan your adventure with our AI-powered itinerary generator</p>
+                <h1 class="animate-text">Discover Your Perfect Day Trip</h1>
+                <p class="animate-text-delay">Plan your adventure with our AI-powered itinerary generator</p>
             </div>
             <div class="hero-illustration">
-                <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="rotating-globe">
                     <circle cx="100" cy="100" r="90" fill="#FFD700" />
                     <path d="M100 20C55.8172 20 20 55.8172 20 100C20 144.183 55.8172 180 100 180C144.183 180 180 144.183 180 100C180 55.8172 144.183 20 100 20ZM100 170C61.3401 170 30 138.66 30 100C30 61.3401 61.3401 30 100 30C138.66 30 170 61.3401 170 100C170 138.66 138.66 170 100 170Z" fill="#FFA500"/>
                     <path d="M100 40C66.8629 40 40 66.8629 40 100C40 133.137 66.8629 160 100 160C133.137 160 160 133.137 160 100C160 66.8629 133.137 40 100 40ZM100 150C72.3858 150 50 127.614 50 100C50 72.3858 72.3858 50 100 50C127.614 50 150 72.3858 150 100C150 127.614 127.614 150 100 150Z" fill="#FF6347"/>
@@ -31,27 +33,27 @@
             </div>
         </header>
 
-        <div class="card">
+        <div class="card animate-in">
             <form method="POST" class="planner-form">
                 <div class="form-group">
-                    <label for="city">
+                    <label for="city" class="animate-label">
                         <i data-feather="map-pin"></i>
                         Destination City
                     </label>
-                    <input type="text" id="city" name="city" required placeholder="Where are you heading?">
+                    <input type="text" id="city" name="city" required placeholder="Where are you heading?" class="animate-input">
                 </div>
 
                 <div class="form-group">
-                    <label for="interests">
+                    <label for="interests" class="animate-label">
                         <i data-feather="heart"></i>
                         Your Interests
                     </label>
                     <input type="text" id="interests" name="interests" required 
-                           placeholder="e.g., museums, hiking, food">
+                           placeholder="e.g., museums, hiking, food" class="animate-input">
                     <small>Separate interests with commas</small>
                 </div>
 
-                <button type="submit" class="cta-button">
+                <button type="submit" class="cta-button animate-button">
                     <i data-feather="calendar"></i>
                     Generate Itinerary
                     <span class="loading-animation"></span>
@@ -61,20 +63,20 @@
 
         {% if show_results %}
         <div class="results fade-in">
-            <div class="card itinerary-box">
-                <h2>
+            <div class="card itinerary-box animate-in">
+                <h2 class="animate-text">
                     <i data-feather="clipboard"></i>
                     Your Day Trip Plan
                 </h2>
-                <div id="itinerary-text" class="itinerary-content">
+                <div id="itinerary-text" class="itinerary-content animate-content">
                     {{ itinerary|safe }}
                 </div>
                 <div class="button-group">
-                    <button onclick="copyItinerary()" class="action-button copy-button">
+                    <button onclick="copyItinerary()" class="action-button copy-button animate-button">
                         <i data-feather="copy"></i>
                         Copy Itinerary
                     </button>
-                    <a href="/download?pdf_path={{ pdf_path }}" class="action-button download-button">
+                    <a href="/download?pdf_path={{ pdf_path }}" class="action-button download-button animate-button">
                         <i data-feather="download"></i>
                         Download PDF
                     </a>
@@ -98,6 +100,19 @@
 
         document.querySelector('.planner-form').addEventListener('submit', function(e) {
             this.classList.add('submitting');
+        });
+
+        // Animate elements when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.animate-in, .animate-text, .animate-text-delay, .animate-label, .animate-input, .animate-button, .animate-content').forEach(el => {
+            observer.observe(el);
         });
     </script>
 </body>
